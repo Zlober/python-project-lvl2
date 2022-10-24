@@ -18,16 +18,16 @@ def generate_diff(file1, file2):
     keys = file1.keys() | file2.keys()
     keys = sorted(keys)
     result = '{\n'
-    spaces = ' ' * 2
+    spaces = ' '
     for key in keys:
         if key in file1 and key not in file2:
-            result += f'{spaces}- {key}: {file1[key]}\n'
+            result += f'{spaces *2}- {key}: {file1[key]}\n'
         elif key in file2 and key not in file1:
-            result += f'{spaces}+ {key}: {file2[key]}\n'
+            result += f'{spaces * 2}+ {key}: {file2[key]}\n'
         elif file1[key] != file2[key]:
-            result += f'{spaces}- {key}: {file1[key]}\n'
-            result += f'{spaces}+ {key}: {file2[key]}\n'
+            result += f'{spaces * 2}- {key}: {file1[key]}\n'
+            result += f'{spaces * 2}+ {key}: {file2[key]}\n'
         else:
-            result += f'{spaces}  {key}: {file1[key]}\n'
+            result += f'{spaces * 4}{key}: {file1[key]}\n'
     result += '}'
     return result.lower()
