@@ -1,4 +1,4 @@
-from Gendiff.core import cmd, generate_diff
+from gendiff.core import cmd, generate_diff
 
 
 def main():
