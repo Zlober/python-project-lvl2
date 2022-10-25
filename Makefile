@@ -9,4 +9,7 @@ publish:
 package-install:
 	python3 -m pip install --user dist/*.whl
 lint:
-	poetry run flake8 Gendiff
+	poetry run flake8 gendiff
+check:
+	poetry run flake8 gendiff
+	poetry run pytest
