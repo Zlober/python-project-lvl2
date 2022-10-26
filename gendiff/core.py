@@ -1,9 +1,12 @@
 import argparse
 import json
+import yaml
 
 
 def cmd():
-    parser = argparse.ArgumentParser(description='Compares two configuration files and shows a difference.')
+    parser = argparse.ArgumentParser(
+        description='Compares two configuration files and shows a difference.',
+    )
     parser.add_argument('first_file')
     parser.add_argument('second_file')
     parser.add_argument_group()
@@ -13,8 +16,8 @@ def cmd():
 
 
 def generate_diff(file1, file2):
-    file1 = json.load(open(file1))
-    file2 = json.load(open(file2))
+    file1 = parser(file1)
+    file2 = parser(file2)
     keys = file1.keys() | file2.keys()
     keys = sorted(keys)
     result = '{\n'
@@ -31,3 +34,12 @@ def generate_diff(file1, file2):
             result += f'{spaces * 4}{key}: {file1[key]}\n'
     result += '}'
     return result.lower()
+
+
+def parser(file):
+    with open(file) as file:
+        if 'json' in file.name:
+            file = json.load(file)
+        else:
+            file = yaml.safe_load(file)
+    return file
