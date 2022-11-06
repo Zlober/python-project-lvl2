@@ -1,45 +1,68 @@
 import argparse
-import json
-import yaml
+from gendiff.parser import parser
+from gendiff.formatters import stylish, plain, json_style
 
 
-def cmd():
-    parser = argparse.ArgumentParser(
+def cli():
+    """Parse arguments."""
+    param = argparse.ArgumentParser(
         description='Compares two configuration files and shows a difference.',
     )
-    parser.add_argument('first_file')
-    parser.add_argument('second_file')
-    parser.add_argument_group()
-    parser.add_argument('-f', '--format', help='set format of output')
-    args = parser.parse_args()
-    return args.first_file, args.second_file
+    param.add_argument('first_file')
+    param.add_argument('second_file')
+    param.add_argument_group()
+    param.add_argument('-f', '--format',
+                       choices=['stylish', 'plain', 'json'],
+                       default='stylish',
+                       help='set format of output')
+    args = param.parse_args()
+    return args.first_file, args.second_file, args.format
 
 
-def generate_diff(file1, file2):
+def generate_diff(file1, file2, output_format='stylish'):
+    """Generate stylized output of diff between two files."""
+    format_type = {
+        'stylish': stylish,
+        'plain': plain,
+        'json': json_style
+    }
     file1 = parser(file1)
     file2 = parser(file2)
-    keys = file1.keys() | file2.keys()
-    keys = sorted(keys)
-    result = '{\n'
-    spaces = ' '
-    for key in keys:
-        if key in file1 and key not in file2:
-            result += f'{spaces *2}- {key}: {file1[key]}\n'
-        elif key in file2 and key not in file1:
-            result += f'{spaces * 2}+ {key}: {file2[key]}\n'
-        elif file1[key] != file2[key]:
-            result += f'{spaces * 2}- {key}: {file1[key]}\n'
-            result += f'{spaces * 2}+ {key}: {file2[key]}\n'
-        else:
-            result += f'{spaces * 4}{key}: {file1[key]}\n'
-    result += '}'
-    return result.lower()
+    diff_dict = diff(file1, file2)
+    return format_type[output_format](diff_dict)
 
 
-def parser(file):
-    with open(file) as file:
-        if 'json' in file.name:
-            file = json.load(file)
-        else:
-            file = yaml.safe_load(file)
-    return file
+def diff(dict1, dict2):
+    """Generate tree"""
+    result = {}
+    keys = dict1.keys() | dict2.keys()
+    deleted = dict1.keys() - dict2.keys()
+    added = dict2.keys() - dict1.keys()
+    for key in sorted(keys):
+        if isinstance(dict1.get(key), dict) and isinstance(dict2.get(key), dict):
+            result[key] = {
+                'type': 'children',
+                'value': diff(dict1[key], dict2[key])
+            }
+        elif key in added:
+            result[key] = {
+                'type': 'added',
+                'value': dict2[key]
+            }
+        elif key in deleted:
+            result[key] = {
+                'type': 'deleted',
+                'value': dict1[key]
+            }
+        elif dict1[key] == dict2[key]:
+            result[key] = {
+                'type': 'unchanged',
+                'value': dict1[key]
+            }
+        elif key in dict1 and key in dict2:
+            result[key] = {
+                'type': 'updated',
+                'old': dict1[key],
+                'new': dict2[key]
+            }
+    return result
