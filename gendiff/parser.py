@@ -1,12 +1,21 @@
+"""Module to parse file."""
 import json
+
 import yaml
 
 
-def parser(file):
-    """Parse a file to Python dict."""
-    with open(file) as file:
-        if 'json' in file.name:
-            file = json.load(file)
+def parser(file_name):
+    """Parse a file to Python dict.
+
+    Args:
+        file_name: path to file
+
+    Returns:
+        dict
+    """
+    with open(file_name) as files:
+        if 'json' in files.name:
+            files = json.load(files)
         else:
-            file = yaml.safe_load(file)
-    return file
+            files = yaml.safe_load(files)
+        return files

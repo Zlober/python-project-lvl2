@@ -1,6 +1,14 @@
+"""Output in json style."""
 import json
 
 
-def json_style(value):
-    """Format in JSON style."""
-    return json.dumps(value, indent=4)
+def json_style(tree):
+    """Format in JSON style.
+
+    Args:
+        tree: dict
+
+    Returns:
+        string in style
+    """
+    return json.dumps(tree, indent=4)
