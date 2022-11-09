@@ -16,7 +16,6 @@ def main():
         '-f', '--format', help='set format of output', default='stylish',
     )
     args = arguments.parse_args()
-    file1, file2, output_format = cli()
     print(generate_diff(
         args.first_file,
         args.second_file,
