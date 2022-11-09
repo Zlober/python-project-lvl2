@@ -3,23 +3,6 @@ from gendiff.formatters import json_style, plain, stylish
 from gendiff.parser import parser
 
 
-def cli():
-    """Parse arguments.
-
-    Returns:
-        tuple of arguments set
-    """
-    arguments = argparse.ArgumentParser(
-        description='Compares two configuration files and shows a difference.',
-    )
-    arguments.add_argument('first_file')
-    arguments.add_argument('second_file')
-    arguments.add_argument_group()
-    arguments.add_argument('-f', '--format', help='set format of output', default='stylish')
-    args = arguments.parse_args()
-    return args.first_file, args.second_file, args.format
-
-
 def generate_diff(file1, file2, output_format='stylish'):
     """Generate stylized output of diff between two files.
 

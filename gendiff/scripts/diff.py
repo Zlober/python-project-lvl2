@@ -1,6 +1,7 @@
 """Gendiff module."""
-from gendiff.core import cli, generate_diff
 import argparse
+
+from gendiff.core import generate_diff
 
 
 def main():
@@ -11,7 +12,9 @@ def main():
     arguments.add_argument('first_file')
     arguments.add_argument('second_file')
     arguments.add_argument_group()
-    arguments.add_argument('-f', '--format', help='set format of output', default='stylish')
+    arguments.add_argument(
+        '-f', '--format', help='set format of output', default='stylish',
+    )
     args = arguments.parse_args()
     file1, file2, output_format = cli()
     print(generate_diff(
