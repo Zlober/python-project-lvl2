@@ -22,7 +22,10 @@ def generate_diff(file1, file2, output_format='stylish'):
     file1 = parser(file1)
     file2 = parser(file2)
     diff_dict = diff(file1, file2)
-    return format_type[output_format](diff_dict)
+    formatter = format_type.get(output_format)
+    if not formatter:
+        return 'Unsupported formatter'
+    return formatter(diff_dict)
 
 
 def diff(dict1, dict2):
