@@ -15,7 +15,9 @@ def parser(file_name):
     """
     with open(file_name) as files:
         if 'json' in files.name:
-            files = json.load(files)
-        else:
-            files = yaml.safe_load(files)
-        return files
+            return json.load(files)
+        if 'yaml' or 'yml' in files.name:
+            return yaml.safe_load(files)
+        raise Exception('Unrecognized format: {0}'.format(
+            files.name,
+        ))
