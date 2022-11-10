@@ -74,5 +74,5 @@ def check_for_complex(tree_value):
         complex.txt or unchanged
     """
     if isinstance(tree_value, dict):
-        return '[complex.txt value]'
+        return '[complex value]'
     return convert_exception(tree_value)
