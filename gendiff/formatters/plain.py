@@ -1,5 +1,4 @@
 """Output in plain style."""
-from gendiff.formatters.stylish import convert_exception
 
 
 def plain(tree, parent=''):
@@ -65,14 +64,21 @@ def make_property(tree_type, node, tree_item):
 
 
 def check_for_complex(tree_value):
-    """Check the value for complex.txt value.
+    """Check the value for complex value.
 
     Args:
         tree_value: value
 
     Returns:
-        complex.txt or unchanged
+        complex or unchanged
     """
     if isinstance(tree_value, dict):
         return '[complex value]'
-    return convert_exception(tree_value)
+    if isinstance(tree_value, bool):
+        return str(tree_value).lower()
+    if tree_value is None:
+        return 'null'
+    if isinstance(tree_value, str):
+        return "'{0}'".format(tree_value)
+    else:
+        return tree_value
