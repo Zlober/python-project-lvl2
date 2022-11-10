@@ -14,4 +14,4 @@ def argument_parser():
         '-f', '--format', help='set format of output', default='stylish',
     )
     args = arguments.parse_args()
-    return args
+    return args.first_file, args.second_file, args.format
