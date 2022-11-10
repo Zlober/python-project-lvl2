@@ -1,5 +1,5 @@
 """Output in plain style."""
-from gendiff.formatters import convert_exception
+from gendiff.formatters.stylish import convert_exception
 
 
 def plain(tree, parent=''):
