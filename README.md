@@ -43,6 +43,12 @@ gendiff file1.json file2.json
 If `format` option is omitted, output will be in `stylish` by default.
 [![asciicast](https://asciinema.org/a/rIfiUDF1zfFWe2kZykAs83pWn.svg)](https://asciinema.org/a/rIfiUDF1zfFWe2kZykAs83pWn)
 
+## Comparing flat YAML files
+```bash
+gendiff file1.yaml file2.yaml
+```
+[![asciicast](https://asciinema.org/a/D6YNR8ryM2YKJrWp39jRkpnr4.svg)](https://asciinema.org/a/D6YNR8ryM2YKJrWp39jRkpnr4)
+
 ## Comparing files with nested structures
 
 ```bash
