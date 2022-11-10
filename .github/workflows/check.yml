@@ -1,35 +1,32 @@
 name: Python CI
 
-on:
-  - push
-  - pull_request
-
+on: push
 jobs:
-  build:
+  start_tests:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        # we want to test our package on several versions of Python
-        python-version: [3.8, 3.9]
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
-        # make depends on poetry
+          python-version: 3.8.x
       - name: Install dependencies
         run: |
           pip install poetry
           make install
-      - name: Run linter and pytest
+      - name: Run tests
         run: |
-          make lint
-          make check
-      - name: Test & publish code coverage
-        uses: paambaati/codeclimate-action@v2.7.5
+          make tests
+      - name: Create reporter
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter before-build
+      - name: test
+        run: |
+          make test-cov
+      - name: sending reporter
         env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ZLOBER }}
-        with:
-          coverageCommand: make test-coverage
-          debug: true
+          GITHUB_TOKEN: ${{ secrets.TEST_REPORTER_ID }}
+        run: |
+          ./cc-test-reporter after-build -r "$GITHUB_TOKEN"
