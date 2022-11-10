@@ -10,5 +10,7 @@ package-install:
 	python3 -m pip install --user dist/*.whl
 lint:
 	poetry run flake8 gendiff
-check:
+tests:
 	poetry run pytest
+test-cov:
+	poetry run pytest --cov=gendiff --cov-report xml
