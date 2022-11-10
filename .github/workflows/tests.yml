@@ -2,31 +2,30 @@ name: Python CI
 
 on: push
 jobs:
-  start_tests:
+  start_linter:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.8.x
       - name: Install dependencies
         run: |
-          pip install poetry
+          curl -sSL https://install.python-poetry.org | python3 -
+          pip install pytest
+          poetry install
+          pip install flake8
+          poetry add pytest
+          pip install pytest-cov
+      - name: Run linter
+        run: |
+          poetry build
           make install
-      - name: Run tests
-        run: |
+          make lint
           make tests
-      - name: Create reporter
-        run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
-          ./cc-test-reporter before-build
-      - name: test
-        run: |
-          make test-cov
-      - name: sending reporter
+          pytest --cov
+      - name: climate coverage
+        uses: paambaati/codeclimate-action@v3.0.0
         env:
-          GITHUB_TOKEN: ${{ secrets.TEST_REPORTER_ID }}
-        run: |
-          ./cc-test-reporter after-build -r "$GITHUB_TOKEN"
+         CC_TEST_REPORTER_ID: 48662e20951ddcc6cf6e6ef2b86184e2b7d9d7350cee6c003302aba7175e9499
+        with:
+         coverageCommand: poetry run pytest --cov=gendiff --cov-report xml
+         debug: true
