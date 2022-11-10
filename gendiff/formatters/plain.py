@@ -65,14 +65,14 @@ def make_property(tree_type, node, tree_item):
 
 
 def check_for_complex(tree_value):
-    """Check the value for complex value.
+    """Check the value for complex.txt value.
 
     Args:
         tree_value: value
 
     Returns:
-        complex or unchanged
+        complex.txt or unchanged
     """
     if isinstance(tree_value, dict):
-        return '[complex value]'
+        return '[complex.txt value]'
     return convert_exception(tree_value)

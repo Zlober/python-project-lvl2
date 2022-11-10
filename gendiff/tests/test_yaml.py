@@ -1,9 +1,7 @@
 """YAML files diff test."""
-
 import os
 
 from gendiff.core import generate_diff
-from gendiff.tests import expected
 
 
 def files(file_name):
@@ -18,12 +16,26 @@ def files(file_name):
     return os.path.join('gendiff', 'tests', 'fixtures', file_name)
 
 
+def open_files(file_path):
+    """Read the file.
+
+    Args:
+        file_path: path to file
+
+    Returns:
+        data
+    """
+    with open(file_path) as txt_file:
+        txt_file = txt_file.read()
+    return txt_file
+
+
 def test1_simple_string():
     """Test 1."""
     actual = generate_diff(
         files('simple_file1.yaml'), files('simple_file2.yaml'),
     )
-    assert actual == expected.SIMPLE_STRING
+    assert actual == open_files(files('simple.txt'))
 
 
 def test2_simple_plain():
@@ -31,7 +43,7 @@ def test2_simple_plain():
     actual = generate_diff(
         files('simple_file1.yaml'), files('simple_file2.yaml'), 'plain',
     )
-    assert actual == expected.SIMPLE_PLAIN
+    assert actual == open_files(files('simple_plain.txt'))
 
 
 def test3_simple_json():
@@ -39,7 +51,7 @@ def test3_simple_json():
     actual = generate_diff(
         files('simple_file1.yaml'), files('simple_file2.yaml'), 'json',
     )
-    assert actual == expected.SIMPLE_JSON
+    assert actual == open_files(files('simple_json.txt'))
 
 
 def test4_complex_string():
@@ -47,7 +59,7 @@ def test4_complex_string():
     actual = generate_diff(
         files('complex_file1.yaml'), files('complex_file2.yaml'),
     )
-    assert actual == expected.COMPLEX_STRING
+    assert actual == open_files(files('complex.txt'))
 
 
 def test5_complex_plain():
@@ -55,7 +67,7 @@ def test5_complex_plain():
     actual = generate_diff(
         files('complex_file1.yaml'), files('complex_file2.yaml'), 'plain',
     )
-    assert actual == expected.COMPLEX_PLAIN
+    assert actual == open_files(files('complex_plain.txt'))
 
 
 def test6_complex_json():
@@ -63,4 +75,4 @@ def test6_complex_json():
     actual = generate_diff(
         files('complex_file1.yaml'), files('complex_file2.yaml'), 'json',
     )
-    assert actual == expected.COMPLEX_JSON
+    assert actual == open_files(files('complex_json.txt'))
