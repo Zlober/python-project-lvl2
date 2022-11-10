@@ -2,7 +2,7 @@ name: Python CI
 
 on: push
 jobs:
-  start_linter:
+  tests:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
