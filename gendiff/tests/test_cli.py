@@ -1,5 +1,8 @@
 """Cli test."""
 import os
+
+import pytest
+
 from gendiff.core import generate_diff
 
 
@@ -15,9 +18,9 @@ def files(file_name):
     return os.path.join('gendiff', 'tests', 'fixtures', file_name)
 
 
-def test_usupported_formatter():
-    expected = 'Unsupported formatter'
-    actual = generate_diff(
-        files('simple_file1.json'), files('simple_file1.json'), 'blabla',
-    )
-    assert actual == expected
+def test_unsupported_formatter():
+    with pytest.raises(Exception) as expected:
+        generate_diff(
+            files('simple_file1.json'), files('simple_file1.json'), 'blabla',
+        )
+        assert expected.value == 'Unsupported formatter'

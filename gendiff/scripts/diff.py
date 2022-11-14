@@ -1,5 +1,6 @@
 """Gendiff module."""
 from gendiff.core import generate_diff
+
 from gendiff.cli import argument_parser
 
 
